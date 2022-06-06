@@ -13,34 +13,62 @@ let days = [
 
 let currentDay = days[day];
 let currentHour = now.getHours();
+if (currentHour < 10) {
+  currentHour = `0${currentHour}`;
+}
 let currentMinute = now.getMinutes();
-
-finalDate = document.querySelector(".date");
+if (currentMinute < 10) {
+  currentMinute = `0${currentMinute}`;
+}
+let finalDate = document.querySelector(".date");
 finalDate.innerHTML = `${currentDay} ${currentHour}:${currentMinute}`;
 
-function currentCity(event) {
+function searchLocation(position) {
+  let lat = position.coords.latitude;
+  let lon = position.coords.longitude;
+  let apiKey = "57302bc3b033b0a28c10dc41ed39b53f";
+  let apiUrlGeo = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+  axios.get(apiUrlGeo).then(showTemp);
+}
+
+function getCurrentLocation(event) {
   event.preventDefault();
-  let city = document.querySelector("#cityName");
+  navigator.geolocation.getCurrentPosition(searchLocation);
+}
+
+function showTemp(response) {
+  let cTemp = Math.round(response.data.main.temp);
+  let temp = document.querySelector(".mainTemp");
+  temp.innerHTML = `${cTemp}°C`;
   let h1 = document.querySelector("#cityH1");
-  h1.innerHTML = city.value;
+  console.log(response.data);
+
+  h1.innerHTML = response.data.name;
+  let info = document.querySelector("#description");
+  info.innerHTML = response.data.weather[0].description;
+}
+
+function searchCity(city) {
+  let apiKey = "57302bc3b033b0a28c10dc41ed39b53f";
+  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+  axios.get(apiUrl).then(showTemp);
+}
+
+function handleSubmit(event) {
+  event.preventDefault();
+  let city = document.querySelector("#cityName").value;
+  searchCity(city);
 }
 
 let form = document.querySelector("#form");
-form.addEventListener("submit", currentCity);
+form.addEventListener("submit", handleSubmit);
 
-function changeTempCels(event) {
-  event.preventDefault();
-  let temp = document.querySelector(".mainTemp");
-  temp.innerHTML = `29°`;
-}
+let currentLocBtn = document.querySelector("#secondary");
+currentLocBtn.addEventListener("click", getCurrentLocation);
 
-let newCels = document.querySelector("#cels");
-newCels.addEventListener("click", changeTempCels);
-
-function changeTempFar(event) {
-  event.preventDefault();
-  let temp = document.querySelector(".mainTemp");
-  temp.innerHTML = `32°`;
-}
-let newFar = document.querySelector("#far");
-newFar.addEventListener("click", changeTempFar);
+//function changeTempCels(event) {
+// event.preventDefault();
+//let temp = document.querySelector(".mainTemp");
+//temp.innerHTML = `29°`;
+//}
+searchCity("New York");
