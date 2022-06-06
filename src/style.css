@@ -23,6 +23,10 @@ h2 {
 .mainTemp {
   margin-right: 0;
 }
+.paragraph {
+  font-size: 12px;
+  margin-top: 5px;
+}
 
 a {
   font-size: 25px;
