@@ -1,6 +1,7 @@
 body {
   font-family: "Mountains of Christmas", cursive;
   font-family: "Ubuntu Mono", monospace;
+  background-color: lightgrey;
 }
 h1 {
   color: white;
@@ -34,7 +35,12 @@ h2 {
 #cityH1 {
   margin-bottom: 0px;
 }
-
+#secondary {
+  width: 75px;
+}
+#main {
+  width: 75px;
+}
 a {
   font-size: 25px;
   text-decoration: none;
@@ -57,4 +63,7 @@ a {
 
 .main-icon {
   font-size: 10px;
+}
+.weather-forecast-temperature-min {
+  color: grey;
 }
